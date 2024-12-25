@@ -27,61 +27,61 @@ using namespace std;
 	    cout << "\n\n";
 	}
 	
-// Function to register a new user
-	void registerUser() {
-	    string* username = new string; // Dynamically allocate memory for username
-	    string* password = new string; // Dynamically allocate memory for password
-	    ofstream file("users.txt", ios::app); // Open file in append mode
-	
-	    cout << "Enter a username: ";
-	    cin >> *username; // Use pointer to store input
-	    cout << "Enter a password: ";
-	    cin >> *password; // Use pointer to store input
-	
-	    // Store username and password in the file
-	    file << *username << ":" << *password << endl;
-	    file.close();
-	
-	    cout << "Registration successful!" << endl;
-	
-	    // Free dynamically allocated memory
-	    delete username;
-	    delete password;
-	}
-
-	
-// Function to log in a user
-	bool login() {
-	    // Dynamically allocate memory for strings
-	    string* username = new string;
-	    string* password = new string;
-	    string* storedUsername = new string;
-	    string* storedPassword = new string;
-	    ifstream file("users.txt"); // Open the file to read user details
-	
-	    cout << "Enter username: ";
-	    cin >> *username;
-	    cout << "Enter password: ";
-	    cin >> *password;
-	
-	    while (getline(file, *storedUsername, ':') && getline(file, *storedPassword)) {
-	        if (*storedUsername == *username && *storedPassword == *password) {
-	            file.close();
-	            delete username;
-	            delete password;
-	            delete storedUsername;
-	            delete storedPassword;
-	            return true; // Successfully logged in
-	        }
-	    }
-	
-	    file.close();
-	    delete username;
-	    delete password;
-	    delete storedUsername;
-	    delete storedPassword;
-	    return false; // Failed to log in
-	}
+		// Function to register a new user
+			void registerUser() {
+			    string* username = new string; // Dynamically allocate memory for username
+			    string* password = new string; // Dynamically allocate memory for password
+			    ofstream file("users.txt", ios::app); // Open file in append mode
+			
+			    cout << "Enter a username: ";
+			    cin >> *username; // Use pointer to store input
+			    cout << "Enter a password: ";
+			    cin >> *password; // Use pointer to store input
+			
+			    // Store username and password in the file
+			    file << *username << ":" << *password << endl;
+			    file.close();
+			
+			    cout << "Registration successful!" << endl;
+			
+			    // Free dynamically allocated memory
+			    delete username;
+			    delete password;
+			}
+		
+			
+		// Function to log in a user
+			bool login() {
+			    // Dynamically allocate memory for strings
+			    string* username = new string;
+			    string* password = new string;
+			    string* storedUsername = new string;
+			    string* storedPassword = new string;
+			    ifstream file("users.txt"); // Open the file to read user details
+			
+			    cout << "Enter username: ";
+			    cin >> *username;
+			    cout << "Enter password: ";
+			    cin >> *password;
+			
+			    while (getline(file, *storedUsername, ':') && getline(file, *storedPassword)) {
+			        if (*storedUsername == *username && *storedPassword == *password) {
+			            file.close();
+			            delete username;
+			            delete password;
+			            delete storedUsername;
+			            delete storedPassword;
+			            return true; // Successfully logged in
+			        }
+			    }
+			
+			    file.close();
+			    delete username;
+			    delete password;
+			    delete storedUsername;
+			    delete storedPassword;
+			    return false; // Failed to log in
+			}
 
 	// Inventory size
 	const int MAX_INVENTORY_SIZE = 10;
@@ -93,8 +93,9 @@ using namespace std;
 	    ifstream file("inventory.txt");
 	    if (file.is_open()) {
 	        inventoryCount = 0;
-	        while (file >> inventory[inventoryCount] && inventoryCount < MAX_INVENTORY_SIZE) {
-	            inventoryCount++;
+	        string item;
+	        while (getline(file, item) && inventoryCount < MAX_INVENTORY_SIZE) {
+	            inventory[inventoryCount++] = item;
 	        }
 	        file.close();
 	    }
@@ -201,80 +202,79 @@ using namespace std;
 	}
 
 // Pattern puzzle
-	void patternPuzzle() {
-	    cout << "You see a keypad with four buttons: 1, 2, 3, 4.\n";
-	    cout << "To unlock the vault, you need to figure out the correct sequence to press based on the clues.\n";
-	    cout << "Clue 1: The sequence alternates between even and odd positions.\n";
-	    cout << "Clue 2: The first button to press is '1'.\n";
-	    cout << "Clue 3: The third button to press is '2'.\n";
-	    
-	    int playerAnswer[4];  // Array to store the player's answer
-	    cout << "Enter the sequence of four numbers separated by spaces (e.g., 1 3 2 4): ";
-	    
-	    // Get player's input
-	    for (int i = 0; i < 4; ++i) {
-	        cin >> playerAnswer[i];
-	    }
-	    
-	    // Check if the player's answer matches the correct pattern
-	    int correctPattern[4] = {1, 3, 2, 4}; // Correct sequence pattern
-	    
-	    bool isCorrect = true;  // Assume the answer is correct initially
-	    
-	    // Compare player's answer to the correct pattern
-	    for (int i = 0; i < 4; ++i) {
-	        if (playerAnswer[i] != correctPattern[i]) {
-	            isCorrect = false;  // If any number is incorrect, the answer is wrong
-	            break;
-	        }
-	    }
-	    
-	    // If correct, unlock the vault; otherwise, restart the puzzle
-	    if (isCorrect) {
-	        cout << "The vault unlocks! You found confidential files inside. Added 'Confidential Files' to your inventory.\n";
-	        addToInventory("Confidential Files");
-	    } else {
-	        cout << "Incorrect sequence! Try again...\n";
-	        patternPuzzle();  // Restart the puzzle on incorrect answer
-	    }
-	}
-
-// Function for the fight puzzle
-	void fightPuzzle() {
-	    cout << "You are surrounded by guards! You need to act fast to survive.\n";
-	    cout << "A guard lunges at you with a knife. Quickly, react by choosing the correct command!\n";
+		void patternPuzzle() {
+		    cout << "You see a keypad with four buttons: 1, 2, 3, 4.\n";
+		    cout << "To unlock the vault, you need to figure out the correct sequence to press based on the clues.\n";
+		    cout << "Clue 1: The sequence alternates between even and odd positions.\n";
+		    cout << "Clue 2: The third button to press is '2'.\n";
+		    
+		    int playerAnswer[4];  // Array to store the player's answer
+		    cout << "Enter the sequence of four numbers separated by spaces : ";
+		    
+		    // Get player's input
+		    for (int i = 0; i < 4; ++i) {
+		        cin >> playerAnswer[i];
+		    }
+		    
+		    // Check if the player's answer matches the correct pattern
+		    int correctPattern[4] = {4, 1, 2, 3}; // Correct sequence pattern
+		    
+		    bool isCorrect = true;  // Assume the answer is correct initially
+		    
+		    // Compare player's answer to the correct pattern
+		    for (int i = 0; i < 4; ++i) {
+		        if (playerAnswer[i] != correctPattern[i]) {
+		            isCorrect = false;  // If any number is incorrect, the answer is wrong
+		            break;
+		        }
+		    }
+		    
+		    // If correct, unlock the vault; otherwise, restart the puzzle
+		    if (isCorrect) {
+		        cout << "The vault unlocks! You found confidential files inside. Added 'Confidential Files' to your inventory.\n";
+		        addToInventory("Confidential Files");
+		    } else {
+		        cout << "Incorrect sequence! Try again...\n";
+		        patternPuzzle();  // Restart the puzzle on incorrect answer
+		    }
+		}
 	
-	    // Quick-time event (QTE) puzzle
-	    cout << "Press 'D' to dodge the attack or 'S' to strike first.\n";
-	    char reaction;
-	    cin >> reaction;
-	
-	    if (reaction == 'D' || reaction == 'd') {
-	        cout << "You dodge the attack and disarm the guard!\n";
-	    } else if (reaction == 'S' || reaction == 's') {
-	        cout << "You strike first and knock the guard out!\n";
-	    } else {
-	        cout << "You hesitated! The guard manages to strike you. Let's try again.\n";
-	        return;  // Retry the fight if the player fails
-	    }
-	
-	    cout << "A second guard comes at you with a taser. React fast!\n";
-	    cout << "Press 'E' to evade or 'F' to fight back.\n";
-	    cin >> reaction;
-	
-	    if (reaction == 'E' || reaction == 'e') {
-	        cout << "You evade the taser and counterattack with a swift move!\n";
-	    } else if (reaction == 'F' || reaction == 'f') {
-	        cout << "You fight back and disable the guard!\n";
-	    } else {
-	        cout << "You took too long to react! The taser hits you. Try again.\n";
-	        return;  // Retry the fight if the player fails
-	    }
-	
-	    addToInventory("Guard Weapon");  // Add the weapon to the inventory after success
-	    cout << "You've successfully fought your way out!\n";
-	}	
-	
+	// Function for the fight puzzle
+		void fightPuzzle() {
+		    cout << "You are surrounded by guards! You need to act fast to survive.\n";
+		    cout << "A guard lunges at you with a knife. Quickly, react by choosing the correct command!\n";
+		
+		    // time event puzzle
+		    cout << "Press 'D' to dodge the attack or 'S' to strike first.\n";
+		    char reaction;
+		    cin >> reaction;
+		
+		    if (reaction == 'D' || reaction == 'd') {
+		        cout << "You dodge the attack and disarm the guard!\n";
+		    } else if (reaction == 'S' || reaction == 's') {
+		        cout << "You strike first and knock the guard out!\n";
+		    } else {
+		        cout << "You hesitated! The guard manages to strike you. Let's try again.\n";
+		        return;  // Retry the fight if the player fails
+		    }
+		
+		    cout << "A second guard comes at you with a taser. React fast!\n";
+		    cout << "Press 'E' to evade or 'F' to fight back.\n";
+		    cin >> reaction;
+		
+		    if (reaction == 'E' || reaction == 'e') {
+		        cout << "You evade the taser and counterattack with a swift move!\n";
+		    } else if (reaction == 'F' || reaction == 'f') {
+		        cout << "You fight back and disable the guard!\n";
+		    } else {
+		        cout << "You took too long to react! The taser hits you. Try again.\n";
+		        return;  // Retry the fight if the player fails
+		    }
+		
+		    addToInventory("Guard Weapon");  // Add the weapon to the inventory after success
+		    cout << "You've successfully fought your way out!\n";
+		}	
+		
 
 
 // Declaration of scene 10, to be used in function.
@@ -287,7 +287,7 @@ using namespace std;
         cout << "You approach the jet's ignition control panel.\n";
         cout << "There are 6 switches labeled A, B, C, D, E, F.\n";
         cout << "You need to turn off switches B, E, and D in that order.\n";
-        cout << "Enter the sequence of switches to turn off (e.g., B E D): ";
+        cout << "Enter the sequence of switches to turn off : ";
         string sequence;
         cin.ignore();
         getline(cin, sequence);
@@ -444,141 +444,155 @@ using namespace std;
 	
 // Scene 1
 	void scene1() {
-    cout << endl;
-    cout << "Scene 1: The Mysterious Call\n";
-    cout << "Blake is sitting in his dimly lit office, the rain tapping softly against the windows. The clock strikes midnight. Suddenly, his phone rings; an encrypted call from an unknown number.\n";
-    cout << "Blake receives an encrypted call hinting at a conspiracy involving powerful figures.\n";
-    cout << "Choices:\n";
-    cout << "1. Trace the call to a suspicious warehouse.\n";
-    cout << "2. Ignore it and investigate the sender.\n";
-    cout << "3. View your inventory.\n"; // Option to view inventory
-    int choice;
-    
+	    cout << endl;
+	    cout << "Scene 1: The Mysterious Call\n";
+	    cout << "Blake is sitting in his dimly lit office, the rain tapping softly against the windows. The clock strikes midnight. Suddenly, his phone rings; an encrypted call from an unknown number.\n";
+	    cout << "Blake receives an encrypted call hinting at a conspiracy involving powerful figures.\n";
+	    cout << "Choices:\n";
+	    cout << "1. Trace the call to a suspicious warehouse.\n";
+	    cout << "2. Ignore it and investigate the sender.\n";
+	    cout << "3. View your inventory.\n"; // Option to view inventory
+	    int choice;
     // Loop until a valid choice is made
     while (true) {
         cout << "Enter your choice: ";
         cin >> choice;
 
-        if (choice == 1) {
-            cout << "You trace the call to a suspicious warehouse. Inside, you find a locked safe glowing ominously.\n";
-            cout << "To unlock the secrets within, you must solve a puzzle.\n";
-            numberLockPuzzle(); // Call the puzzle function
-            cout << "\nWith the 'Secret Dossier' in hand, you decide to prepare for the next step of your mission.\n";
-            break; // Exit the loop and move to the next scene
-        } else if (choice == 2) {
-            cout << "You investigate the sender and uncover a small clue: a locked safe. To proceed, you must solve its riddle.\n";
-            numberLockPuzzle(); // Call the puzzle function
-            cout << "\nAfter cracking the safe and retrieving the 'Secret Dossier,' you feel ready to dive deeper into the mystery.\n";
-            break; // Exit the loop and move to the next scene
-        } else if (choice == 3) {
-            showInventory(); // Call to display the player's inventory
-            // The loop will continue, asking the user for input again without progressing to the next scene
-        } else {
-            cout << "Invalid choice. Let's try again...\n"; // Retry on invalid input
+        switch (choice) {
+            case 1:
+                cout << "You trace the call to a suspicious warehouse. Inside, you find a locked safe glowing ominously.\n";
+                cout << "To unlock the secrets within, you must solve a puzzle.\n";
+                numberLockPuzzle(); // Call the puzzle function
+                cout << "\nWith the 'Secret Dossier' in hand, you decide to prepare for the next step of your mission.\n";
+                break; // Exit the switch
+            case 2:
+                cout << "You investigate the sender and uncover a small clue: a locked safe. To proceed, you must solve its riddle.\n";
+                numberLockPuzzle(); // Call the puzzle function
+                cout << "\nAfter cracking the safe and retrieving the 'Secret Dossier,' you feel ready to dive deeper into the mystery.\n";
+                break; // Exit the switch
+            case 3:
+                showInventory(); // Call to display the player's inventory
+                continue; // Return to the loop to ask for input again
+            default:
+                cout << "Invalid choice. Let's try again...\n"; // Retry on invalid input
+                continue; // Return to the loop
         }
+
+        break; // Break out of the loop if a valid choice is made
     }
 
     transition(); // Smooth flow to the next scene after a valid choice
 }
 
+		
+	// Scene 2
+		void scene2() {
+		cout << endl;
+	    cout << "Scene 2: The Warehouse\n";
+	    cout << "After a tense drive through the city’s backstreets, you arrive at the outskirts of town.\n";
+	    cout<< "The warehouse looms ahead—an abandoned structure, its windows broken, casting shadows under the pale moonlight. The air is thick with the scent of oil and rust.\n";
+	    cout << "You cautiously step inside, the creaking of old wooden floors echoing in the silence. A faint glow from a single overhead light illuminates the dust-covered floor, where you spot signs of recent activity. There’s something here—something hidden in the corners of this forgotten place.\n";
+	    cout << "You begin to search for clues linking a powerful corporation to illegal activity.\n";
+	    cout << "Choices:\n";
+	    cout << "1. Search the warehouse thoroughly.\n";
+	    cout << "2. Set up surveillance and wait for suspects to arrive.\n";
+	    int choice;
+	    cout << "Enter your choice: ";
+	    cin >> choice;
 	
-// Scene 2
-	void scene2() {
-	cout << endl;
-    cout << "Scene 2: The Warehouse\n";
-    cout << "After a tense drive through the city’s backstreets, you arrive at the outskirts of town.\n";
-    cout<< "The warehouse looms ahead—an abandoned structure, its windows broken, casting shadows under the pale moonlight. The air is thick with the scent of oil and rust.\n";
-    cout << "You cautiously step inside, the creaking of old wooden floors echoing in the silence. A faint glow from a single overhead light illuminates the dust-covered floor, where you spot signs of recent activity. There’s something here—something hidden in the corners of this forgotten place.\n";
-    cout << "You begin to search for clues linking a powerful corporation to illegal activity.\n";
-    cout << "Choices:\n";
-    cout << "1. Search the warehouse thoroughly.\n";
-    cout << "2. Set up surveillance and wait for suspects to arrive.\n";
-    int choice;
-    cout << "Enter your choice: ";
-    cin >> choice;
-
-    if (choice == 1) {
-        cout << "You find a hidden stash of documents. Added 'Evidence Folder' to your inventory.\n";
-        addToInventory("Evidence Folder");
-    } else if (choice == 2) {
-        cout << "You observe a key suspect arriving. Added 'Suspect Photo' to your inventory.\n";
-        addToInventory("Suspect Photo");
-    } else {
-        cout << "Invalid choice. Let's try again...\n";
-        scene2(); // Restart the scene on invalid input
-        return;  
-    }
-    transition(); 
-}
-
+	    if (choice == 1) {
+	        cout << "You find a hidden stash of documents. Added 'Evidence Folder' to your inventory.\n";
+	        addToInventory("Evidence Folder");
+	    } else if (choice == 2) {
+	        cout << "You observe a key suspect arriving. Added 'Suspect Photo' to your inventory.\n";
+	        addToInventory("Suspect Photo");
+	    } else {
+	        cout << "Invalid choice. Let's try again...\n";
+	        scene2(); // Restart the scene on invalid input
+	        return;  
+	    }
+	    transition(); 
+	}
 	
-// Scene 3
-	void scene3() {
-    cout << endl;
-    cout << "Scene 3: The Chase\n";
-    cout << "The suspect, realizing he’s been compromised, bolts into the night. His footsteps echo through the narrow alleyways as the sound of distant traffic fades into the background. The dim streetlights flicker above, casting long, ominous shadows across the cobblestone streets. A cold wind rushes through the alleys, carrying with it the faint smell of wet asphalt and urgency.\n";
-    cout << "You must decide how to respond as the suspect disappears into the darkness, his form growing smaller with each passing second.\n";
-    cout << "Choices:\n";
-    cout << "1. Chase them through the alleys.\n";
-    cout << "2. Call for backup and tail them discreetly.\n";
-    cout << "3. View your inventory.\n";  // Option to view inventory
-    int choice;
-
-    // Loop until a valid choice is made
-    while (true) {
-        cout << "Enter your choice: ";
-        cin >> choice;
-
-        if (choice == 1) {
-            cout << "You catch the suspect and retrieve a mysterious encrypted message.\n";
-            cout << "The message seems crucial, but it's encrypted. To continue, you need to solve this interactive puzzle.\n";
-            interactiveDialoguePuzzle(); // Call the interactive dialogue puzzle function
-            cout << "\nWith the valuable lead in hand, you uncover the suspect's next move.\n";
-            break; // Exit the loop and move to the next scene
-        } else if (choice == 2) {
-            cout << "You tail the suspect to a hidden lair. There, you find a cryptic message written on a wall.\n";
-            cout << "To proceed, you must solve this puzzle by talking to the suspect's informant.\n";
-            interactiveDialoguePuzzle(); // Call the interactive dialogue puzzle function
-            cout << "\nThe conversation reveals the suspect's safehouse location.\n";
-            break; // Exit the loop and move to the next scene
-        } else if (choice == 3) {
-            showInventory(); // Call to display the player's inventory
-            // The loop will continue, asking the user for input again without progressing to the next scene
-        } else {
-            cout << "Invalid choice. Let's try again...\n"; // Retry on invalid input
-        }
-    }
-
-    transition();
-}
+		
+	// Scene 3
+		void scene3() {
+	    cout << endl;
+	    cout << "Scene 3: The Chase\n";
+	    cout << "The suspect, realizing he’s been compromised, bolts into the night. His footsteps echo through the narrow alleyways as the sound of distant traffic fades into the background. The dim streetlights flicker above, casting long, ominous shadows across the cobblestone streets. A cold wind rushes through the alleys, carrying with it the faint smell of wet asphalt and urgency.\n";
+	    cout << "You must decide how to respond as the suspect disappears into the darkness, his form growing smaller with each passing second.\n";
+	    cout << "Choices:\n";
+	    cout << "1. Chase them through the alleys.\n";
+	    cout << "2. Call for backup and tail them discreetly.\n";
+	    cout << "3. View your inventory.\n";  // Option to view inventory
+	    int choice;
+	
+	    // Loop until a valid choice is made
+	    while (true) {
+	        cout << "Enter your choice: ";
+	        cin >> choice;
+	
+	        if (choice == 1) {
+	            cout << "You catch the suspect and retrieve a mysterious encrypted message.\n";
+	            cout << "The message seems crucial, but it's encrypted. To continue, you need to solve this interactive puzzle.\n";
+	            interactiveDialoguePuzzle(); // Call the interactive dialogue puzzle function
+	            cout << "\nWith the valuable lead in hand, you uncover the suspect's next move.\n";
+	            break; // Exit the loop and move to the next scene
+	        } else if (choice == 2) {
+	            cout << "You tail the suspect to a hidden lair. There, you find a cryptic message written on a wall.\n";
+	            cout << "To proceed, you must solve this puzzle by talking to the suspect's informant.\n";
+	            interactiveDialoguePuzzle(); // Call the interactive dialogue puzzle function
+	            cout << "\nThe conversation reveals the suspect's safehouse location.\n";
+	            break; // Exit the loop and move to the next scene
+	        } else if (choice == 3) {
+	            showInventory(); // Call to display the player's inventory
+	            // The loop will continue, asking the user for input again without progressing to the next scene
+	        } else {
+	            cout << "Invalid choice. Let's try again...\n"; // Retry on invalid input
+	        }
+	    }
+	
+	    transition();
+	}
 
 
 // Scene 4
 	void scene4() {
-	cout << endl;
+    cout << endl;
     cout << "Scene 4: The Hidden Lair\n";
-   cout << "You’ve made your way to the hidden lair, a desolate, underground bunker concealed beneath the city’s crumbling ruins. The walls are damp, and the air smells of mildew and rust. Dim, flickering lights cast long shadows, adding to the eerie atmosphere of this forgotten place.\n";
+    cout << "You’ve made your way to the hidden lair, a desolate, underground bunker concealed beneath the city’s crumbling ruins. The walls are damp, and the air smells of mildew and rust. Dim, flickering lights cast long shadows, adding to the eerie atmosphere of this forgotten place.\n";
     cout << "In the center of the lair, a large wooden table is cluttered with old maps, files, and strange symbols. On the wall, a map catches your attention—its routes and markings lead to a hidden vault, perhaps the key to unraveling the conspiracy.\n";
     cout << "Choices:\n";
     cout << "1. Take the map and leave quietly.\n";
     cout << "2. Search the lair for more clues.\n";
+    
     int choice;
-    cout << "Enter your choice: ";
-    cin >> choice;
 
-    if (choice == 1) {
-        cout << "You take the map. Added 'Vault Map' to your inventory.\n";
-        addToInventory("Vault Map");
-    } else if (choice == 2) {
-        cout << "You find a coded message. Added 'Coded Message' to your inventory.\n";
-        addToInventory("Coded Message");
-    } else {
-        cout << "Invalid choice. Let's try again...\n";
-        scene4(); 
-        return; 
+    // Prompt for the user's choice
+    while (true) {
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                cout << "You take the map. Added 'Vault Map' to your inventory.\n";
+                addToInventory("Vault Map");
+                break; // Exit the switch
+            case 2:
+                cout << "You find a coded message. Added 'Coded Message' to your inventory.\n";
+                addToInventory("Coded Message");
+                break; // Exit the switch
+            default:
+                cout << "Invalid choice. Let's try again...\n";
+                continue; // Loop again for valid input
+        }
+
+        break; // Exit the loop after a valid choice
     }
-    transition(); 
+
+    transition(); // Smooth flow to the next scene after a valid choice
 }
+
 
 //scene 5	
 	void scene5() {
